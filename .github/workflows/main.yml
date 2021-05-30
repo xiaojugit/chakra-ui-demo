@@ -52,8 +52,8 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           script: |
-            cd /home/mobx-immutable-cart
-            wget https://github.com/xiaojugit/mobx-immutable-cart/releases/latest/download/release.tgz -O release.tgz
+            cd /home/chakra-ui-demo
+            wget https://github.com/xiaojugit/chakra-ui-demo/releases/latest/download/release.tgz -O release.tgz
             tar zxvf release.tgz
             npm install --production
             pm2 reload pm2.config.json
