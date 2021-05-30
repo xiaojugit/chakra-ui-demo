@@ -1,0 +1,157 @@
+import {
+  Box,
+  Button,
+  Checkbox,
+  Divider,
+  Flex,
+  Input,
+  InputGroup,
+  InputLeftAddon,
+  Text,
+} from '@chakra-ui/react';
+import { FaLock, FaUserAlt } from 'react-icons/fa';
+import { AiOutlineQq, AiOutlineWechat, AiOutlineWeibo } from 'react-icons/ai';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import ErrorMessage from './ErrorMessage';
+import axios from 'axios';
+
+function SignIn() {
+  const formik = useFormik({
+    initialValues: { email: '', password: '' },
+    validationSchema: Yup.object({
+      email: Yup.string().email('邮箱格式不对').required('请填写邮箱'),
+      password: Yup.string().required('请填写密码'),
+    }),
+    onSubmit: values => {
+      axios({
+        url: 'https://conduit.productionready.io/api/users/login',
+        method: 'POST',
+        data: {
+          user: {
+            email: values.email,
+            password: values.password,
+          },
+        },
+      }).then(() => {
+        window.alert('登录成功！');
+      });
+    },
+  });
+  return (
+    <Box>
+      <form onSubmit={formik.handleSubmit}>
+        <Box
+          border="1px solid #c8c8c8"
+          borderRadius="md"
+          bgColor="rgba(181,181,181,.1)"
+        >
+          <InputGroup>
+            <InputLeftAddon
+              borderRadius="none"
+              border="none"
+              bgColor="transparent"
+            >
+              <FaUserAlt />
+            </InputLeftAddon>
+            <Input
+              name="email"
+              {...formik.getFieldProps('email')}
+              borderRadius="none"
+              border="none"
+              shadow="none"
+              placeholder="邮箱"
+              _focus={{
+                border: 'none',
+              }}
+              _placeholder={{
+                color: '#999',
+              }}
+            ></Input>
+            {formik.touched.email && formik.errors.email ? (
+              <ErrorMessage message={formik.errors.email}></ErrorMessage>
+            ) : null}
+          </InputGroup>
+          <Divider opacity="1"></Divider>
+          <InputGroup>
+            <InputLeftAddon
+              borderRadius="none"
+              border="none"
+              bgColor="transparent"
+            >
+              <FaLock />
+            </InputLeftAddon>
+            <Input
+              type="password"
+              name="password"
+              {...formik.getFieldProps('password')}
+              borderRadius="none"
+              border="none"
+              shadow="none"
+              focusBorderColor="tranparent"
+              placeholder="密码"
+              _placeholder={{
+                color: '#999',
+              }}
+            ></Input>
+            {formik.touched.password && formik.errors.password ? (
+              <ErrorMessage message={formik.errors.password}></ErrorMessage>
+            ) : null}
+          </InputGroup>
+        </Box>
+
+        <Flex
+          align="center"
+          justifyContent="space-between"
+          py="4"
+          color="#999"
+          fontSize="14px"
+        >
+          <Checkbox>记住我</Checkbox>
+          <Text
+            as="a"
+            href="#"
+            _hover={{
+              color: '#333',
+            }}
+          >
+            登录遇到问题?
+          </Text>
+        </Flex>
+
+        <Button
+          type="submit"
+          w="100%"
+          borderRadius="full"
+          colorScheme="blue"
+          _focus={{ boxShadow: 'none' }}
+        >
+          登录
+        </Button>
+      </form>
+
+      <Box mt="50px">
+        <Flex alignItems="center" px="6" mb="10px">
+          <Divider borderColor="#b5b5b5" opacity="1"></Divider>
+          <Text whiteSpace="nowrap" px="2" color="#b5b5b5" fontSize="12px">
+            社交帐号登录
+          </Text>
+          <Divider borderColor="#b5b5b5" opacity="1"></Divider>
+        </Flex>
+        <Flex justifyContent="center">
+          <Box as="a" href="#" m="15px">
+            <AiOutlineWeibo size="36" color="#e05244" />
+          </Box>
+          <Box as="a" href="#" m="15px">
+            <AiOutlineWechat size="36" color="#00bb29" />
+          </Box>
+          <Box as="a" href="#" m="15px">
+            <AiOutlineQq size="36" color="#498ad5" />
+          </Box>
+        </Flex>
+      </Box>
+    </Box>
+  );
+}
+
+export default SignIn;

@@ -1,0 +1,8 @@
+{
+  "apps": [
+    {
+      "name": "chakra-ui-demo",
+      "script": "./server/index.js"
+    }
+  ]
+}
